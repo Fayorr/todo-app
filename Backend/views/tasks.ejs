@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Tasks | Todo App</title>
+</head>
+<body>
+    <h1>Your Tasks</h1>
+    <p>Welcome, <%= user.name %>!</p>
+    <button><a href="/create">Create a task</a></button>
+    <br>
+    <p>Here are your tasks:</p>
+    <% if (tasks.length === 0) { %>
+        <p>No tasks found.</p>
+    <% } %>
+    <ul>
+        <% tasks.forEach(task => { %>
+            <li>
+                <strong><%= task.title %></strong> - <%= task.description %> 
+                
+            </li>
+            <button><a href="/tasks/<%= task._id %>/edit">Edit</a></button>
+        
+            <form action="/tasks/<%= task._id %>?_method=PUT" method="post">
+                <input type="hidden" name="status" value="completed">
+                <button type="submit">Mark as Completed</button>
+            </form>
+
+
+            <form action="/tasks/<%= task._id %>?_method=DELETE" method="post" style="display:inline;">
+                <button type="submit">Delete</button>
+            </form>
+        <% }) %>
+    </ul>
+    <br>
+
+    <p>Here are your completed tasks:</p>
+
+    <% if (completedTasks.length === 0) { %>
+        <p>No completed tasks found.</p>
+    <% } %>
+    <ul>
+        <% completedTasks.forEach(task => { %>
+            <li>
+                <strong><%= task.title %></strong> - <%= task.description %> 
+            </li>
+        <% }) %>
+    </ul>
+    <br>
+    <form action="/auth/logout" method="post">
+        <button type="submit">Logout</button>
+    </form>
+</body>
+</html>
