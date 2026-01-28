@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+const apiUrl = import.meta.env.VITE_API_URL;
 
 const RegisterPage = () => {
 	const [name, setName] = useState('');
@@ -19,7 +20,7 @@ const RegisterPage = () => {
 		}
 
 		try {
-			const response = await fetch('http://localhost:8000/auth/register', {
+			const response = await fetch(`${apiUrl}/auth/register`, {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
 import { useParams, useNavigate } from 'react-router-dom';
-// import type { Task } from '../types';
+const apiUrl = import.meta.env.VITE_API_URL;
 
 const EditTaskPage = () => {
 	const [title, setTitle] = useState('');
@@ -15,7 +15,7 @@ const EditTaskPage = () => {
 		// This is a placeholder; actual implementation would depend on routing and task ID
 		const fetchTaskData = async () => {
 			try {
-				const response = await fetch(`http://localhost:8000/tasks/${taskId}`, {
+				const response = await fetch(`${apiUrl}/tasks/${taskId}`, {
 					method: 'GET',
 					credentials: 'include',
 					headers: {
@@ -43,7 +43,7 @@ const EditTaskPage = () => {
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
 		try {
-			const response = await fetch(`http://localhost:8000/tasks/${taskId}`, {
+			const response = await fetch(`${apiUrl}/tasks/${taskId}`, {
 				method: 'PUT',
 				credentials: 'include',
 				headers: {

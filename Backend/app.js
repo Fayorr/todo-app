@@ -13,7 +13,10 @@ const PORT = process.env.PORT || 8000;
 
 app.use(
 	cors({
-		origin: 'http://localhost:5173',
+		origin: [
+			'http://localhost:5173',
+			'https://my-todo-frontend-l8n8.onrender.com/',
+		],
 		credentials: true,
 	}),
 );

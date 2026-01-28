@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import type { Task, User } from '../types/index';
+const apiUrl = import.meta.env.VITE_API_URL;
 
 const TaskListPage = () => {
 	const [pendingTasks, setPendingTasks] = useState<Task[]>([]);
@@ -12,7 +13,7 @@ const TaskListPage = () => {
 	const handleLogout = async (e: React.FormEvent) => {
 		e.preventDefault();
 		try {
-			const response = await fetch('http://localhost:8000/auth/logout', {
+			const response = await fetch(`${apiUrl}/auth/logout`, {
 				method: 'POST',
 				credentials: 'include',
 				headers: {
@@ -42,7 +43,7 @@ const TaskListPage = () => {
 	const handleMarkCompleted = async (taskId: string) => {
 		const taskToMove = pendingTasks.find((t: Task) => t._id === taskId);
 		try {
-			const response = await fetch(`http://localhost:8000/tasks/${taskId}`, {
+			const response = await fetch(`${apiUrl}/tasks/${taskId}`, {
 				method: 'PUT',
 				credentials: 'include',
 				headers: {
@@ -78,7 +79,7 @@ const TaskListPage = () => {
 		}
 
 		try {
-			const response = await fetch(`http://localhost:8000/tasks/${taskId}`, {
+			const response = await fetch(`${apiUrl}/tasks/${taskId}`, {
 				method: 'DELETE',
 				credentials: 'include',
 				headers: {
@@ -112,7 +113,7 @@ const TaskListPage = () => {
 			return;
 		}
 		try {
-			const response = await fetch('http://localhost:8000/tasks/completed', {
+			const response = await fetch(`${apiUrl}/tasks/completed`, {
 				method: 'DELETE',
 				credentials: 'include',
 				headers: {
@@ -133,7 +134,7 @@ const TaskListPage = () => {
 		// Fetch tasks from backend API
 		const fetchedTasks = async (): Promise<void> => {
 			try {
-				const response: Response = await fetch('http://localhost:8000/tasks', {
+				const response: Response = await fetch(`${apiUrl}/tasks`, {
 					method: 'GET',
 					credentials: 'include',
 					headers: {

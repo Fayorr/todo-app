@@ -1,5 +1,8 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+// import process.env.API_URL;
+const apiUrl = import.meta.env.VITE_API_URL;
+
 
 const CreateTaskPage = () => {
 	const [title, setTitle] = useState<string>('');
@@ -12,7 +15,7 @@ const CreateTaskPage = () => {
 		setError('');
 
 		try {
-			const response = await fetch('http://localhost:8000/tasks', {
+			const response = await fetch(`${apiUrl}/tasks`, {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',
