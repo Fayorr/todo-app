@@ -15,7 +15,7 @@ app.use(
 	cors({
 		origin: [
 			'http://localhost:5173',
-			'https://my-todo-frontend-l8n8.onrender.com/',
+			'https://my-todo-frontend-l8n8.onrender.com',
 		],
 		credentials: true,
 	}),
