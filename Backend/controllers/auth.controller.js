@@ -40,8 +40,12 @@ const RegisterUser = async (req, res, next) => {
 
 const LogoutUser = (req, res, next) => {
 	try {
-		res.clearCookie('token');
-		res.redirect('/');
+		res.clearCookie('token', {
+			httpOnly: true,
+			secure: true,
+			sameSite: 'None',
+		});
+		res.json({ message: 'Logout successful' });
 	} catch (error) {
 		next(error);
 	}
