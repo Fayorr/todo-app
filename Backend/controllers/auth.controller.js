@@ -7,7 +7,7 @@ const LoginUser = async (req, res, next) => {
 		}
 		const user = req.body;
 		const token = await AuthService.login(user);
-		res.cookie('token', token, { httpOnly: true,  secure: true, ameSite: 'None' });
+		res.cookie('token', token, { httpOnly: true, secure: true, sameSite: 'None' });
 		res.json({ token, message: 'Login successful' });
 	} catch (error) {
 		next(error);
