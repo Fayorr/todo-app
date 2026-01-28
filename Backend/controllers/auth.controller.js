@@ -7,9 +7,8 @@ const LoginUser = async (req, res, next) => {
 		}
 		const user = req.body;
 		const token = await AuthService.login(user);
-		res.cookie('token', token, { httpOnly: true });
-		// res.json({ token, message: 'Login successful' });
-		res.redirect('/tasks');
+		res.cookie('token', token, { httpOnly: true, sameSite: 'Lax' });
+		res.json({ token, message: 'Login successful' });
 	} catch (error) {
 		next(error);
 	}
@@ -22,9 +21,8 @@ const RegisterUser = async (req, res, next) => {
 		}
 		const user = req.body;
 		const token = await AuthService.register(user);
-		res.cookie('token', token, { httpOnly: true });
-		// res.json({ token, message: 'Registration successful' });
-		res.redirect('/tasks');
+		res.cookie('token', token, { httpOnly: true, sameSite: 'Lax' });
+		res.json({ token, message: 'Registration successful' });
 	} catch (error) {
 		next(error);
 	}

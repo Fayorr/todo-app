@@ -10,7 +10,8 @@ const getAllTasks = async (req, res, next) => {
 			user: userId,
 		});
 		const user = await User.findById(userId);
-		res.render('tasks', { tasks, completedTasks, user });
+		// return data as json
+		res.json({ tasks, completedTasks, user });
 	} catch (error) {
 		next(error);
 	}
@@ -18,11 +19,13 @@ const getAllTasks = async (req, res, next) => {
 
 const getTaskById = async (req, res, next) => {
 	try {
-		// Ensure user can only see their own tasks
 		const task = await Task.findOne({ _id: req.params.id, user: req.user.id });
-		if (!task)
-			return res.status(404).render('error', { error: 'Task not found' });
-		res.render('edit', { task });
+
+		if (!task) {
+			return res.status(404).json({ error: 'Task not found' });
+		}
+
+		res.json(task);
 	} catch (error) {
 		next(error);
 	}
@@ -32,7 +35,7 @@ const createTask = async (req, res, next) => {
 	try {
 		const task = new Task({ ...req.body, user: req.user.id });
 		await task.save();
-		res.redirect('/tasks');
+		res.status(201).redirect('/tasks');
 	} catch (error) {
 		next(error);
 	}
@@ -45,9 +48,8 @@ const updateTask = async (req, res, next) => {
 			req.body,
 			{ new: true },
 		);
-		if (!task)
-			return res.status(404).render('error', { error: 'Task not found' });
-		res.redirect('/tasks');
+		if (!task) return res.status(404).json({ error: 'Task not found' });
+		res.json({ message: 'Task updated successfully', task });
 	} catch (error) {
 		next(error);
 	}
@@ -60,9 +62,18 @@ const deleteTask = async (req, res, next) => {
 			{ status: 'deleted' },
 			{ new: true },
 		);
-		if (!task)
-			return res.status(404).render('error', { error: 'Task not found' });
-		res.redirect('/tasks');
+		if (!task) return res.status(404).json({ error: 'Task not found' });
+		res.json({ message: 'Task deleted successfully', task });
+	} catch (error) {
+		next(error);
+	}
+};
+
+const deleteCompletedTasks = async (req, res, next) => {
+	//DELETE ALL TASKS (DELETE MANY)
+	try {
+		const result = await Task.deleteMany({ user: req.user.id , status: 'completed' });
+		res.json({ message: `${result.deletedCount} completed tasks deleted successfully` });
 	} catch (error) {
 		next(error);
 	}
@@ -74,4 +85,5 @@ module.exports = {
 	createTask,
 	updateTask,
 	deleteTask,
+	deleteCompletedTasks,
 };
