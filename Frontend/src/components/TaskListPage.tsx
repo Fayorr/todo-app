@@ -39,7 +39,38 @@ const TaskListPage = () => {
 	const handleEditTask = (taskId: string) => {
 		navigate(`/tasks/${taskId}`);
 	};
+	const handleMarkPending = async (taskId: string) => {
+		const taskToMove = completedTasks.find((t: Task) => t._id === taskId);
+		try {
+			const response = await fetch(`${apiUrl}/tasks/${taskId}`, {
+				method: 'PUT',
+				credentials: 'include',
+				headers: {
+					'Content-Type': 'application/json',
+					Accept: 'application/json',
+				},
+				body: JSON.stringify({ status: 'pending' }),
+			});
 
+			if (!response.ok) {
+				setError('Failed to mark task as pending');
+				return;
+			}
+
+			setCompletedTasks((prevTasks) =>
+				prevTasks.filter((task: Task) => task._id !== taskId),
+			);
+			if (taskToMove) {
+				setPendingTasks((prevTasks) => [
+					...prevTasks,
+					{ ...taskToMove, status: 'pending' }, // Update status manually
+				]);
+			}
+		} catch (err) {
+			setError('An error occurred while marking the task as pending');
+			console.error(err);
+		}
+	};
 	const handleMarkCompleted = async (taskId: string) => {
 		const taskToMove = pendingTasks.find((t: Task) => t._id === taskId);
 		try {
@@ -163,7 +194,7 @@ const TaskListPage = () => {
 			}
 		};
 		fetchedTasks();
-	}, [navigate, setCompletedTasks]);
+	}, [navigate, setCompletedTasks, setPendingTasks]);
 	return (
 		<div className='min-h-screen bg-slate-50 pb-12'>
 			{/* Header/Navbar */}
@@ -367,7 +398,10 @@ const TaskListPage = () => {
 									key={task._id}
 									className='flex items-center gap-4 bg-white/60 p-4 rounded-xl border border-slate-100 opacity-70 group hover:opacity-100 transition-opacity'
 								>
-									<div className='w-6 h-6 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600'>
+									<div
+										onClick={() => handleMarkPending(task._id)}
+										className='w-6 h-6 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600'
+									>
 										<svg
 											xmlns='http://www.w3.org/2000/svg'
 											width='14'
