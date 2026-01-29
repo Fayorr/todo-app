@@ -207,7 +207,7 @@ const TaskListPage = () => {
 						<span className='text-xl font-bold text-slate-900'>TaskFlow</span>
 					</div>
 					<div className='flex items-center gap-4'>
-						<span className='hidden sm:inline text-sm text-slate-500'>
+						<span className='text-sm text-slate-500'>
 							Welcome,{' '}
 							<span className='font-semibold text-slate-900'>{user.name}</span>
 						</span>
