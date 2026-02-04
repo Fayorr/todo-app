@@ -28,7 +28,15 @@ app.use(cookieparser());
 // app.set('view engine', 'ejs');
 // app.set('views', './views');
 
-db.connectToDB();
+// Connect to DB for every request (Serverless pattern)
+app.use(async (req, res, next) => {
+	try {
+		await db.connectToDB();
+		next();
+	} catch (error) {
+		next(error);
+	}
+});
 // Routes
 app.use('/auth', authRouter);
 app.use('/tasks', taskRouter);
