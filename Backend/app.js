@@ -63,12 +63,13 @@ function errorHandler(err, req, res, next) {
 	}
 
 	const statusCode = err.statusCode || 500;
-	const message = err.statusCode
-		? err.message
-		: 'Something went wrong, please try again later';
+	// DEBUG: Return actual error message to client
+	const message = err.message || 'Something went wrong, please try again later';
 
 	// Always return JSON
-	return res.status(statusCode).json({ message, status: statusCode });
+	return res
+		.status(statusCode)
+		.json({ message, status: statusCode, error: err.message });
 }
 app.use(errorHandler);
 
